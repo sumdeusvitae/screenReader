@@ -8,6 +8,16 @@ import os
 from PIL import Image
 import pytesseract
 import pyperclip
+from dotenv import load_dotenv
+# Load environment variables from .env file
+load_dotenv()
+
+# !!!!!! IMPORTANT !!!!!!
+# Set the Tesseract executable path in the environment variables
+# Get the path to the Tesseract executable from the environment variables
+tesseract_path = os.getenv("TESSERACT_PATH")
+
+
 
 # Disable the DPI awareness (this suppresses the warning)
 try:
@@ -15,6 +25,19 @@ try:
 except Exception as e:
     print(f"DPI awareness setting failed: {e}")
 
+def transfer(file):
+    # Set the path to the Tesseract executable
+    pytesseract.pytesseract.tesseract_cmd = tesseract_path
+
+
+    # Perform OCR to extract text
+    text = pytesseract.image_to_string(file)
+
+    # Copy the extracted text to the clipboard
+    pyperclip.copy(text)
+
+    # Print the extracted text
+    print(text)
 
 
 class OverlayWindow(QWidget):
@@ -83,19 +106,6 @@ class OverlayWindow(QWidget):
         # print(f"Captured region: x={x}, y={y}, width={width}, height={height}")
         # screenshot.save("temp.png")
 
-def transfer(file):
-    # Set the path to the Tesseract executable
-    pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
-
-
-    # Perform OCR to extract text
-    text = pytesseract.image_to_string(file)
-
-    # Copy the extracted text to the clipboard
-    pyperclip.copy(text)
-
-    # Print the extracted text
-    print(text)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
