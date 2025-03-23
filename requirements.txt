@@ -1,0 +1,5 @@
+pyautogui
+PySide6
+Pillow
+pytesseract
+pyperclip
